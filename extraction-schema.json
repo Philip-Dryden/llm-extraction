@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": ["string", "null"]
+    },
+    "age": {
+      "type": ["integer", "null"]
+    },
+    "needs": {
+      "type": "object",
+      "properties": {
+        "Einkaufshilfe": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "implicit": {
+                "type": "boolean"
+              }
+            },
+            "required": ["description", "implicit"],
+            "additionalProperties": false
+          }
+        },
+        "Arztbesuche": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "implicit": {
+                "type": "boolean"
+              }
+            },
+            "required": ["description", "implicit"],
+            "additionalProperties": false
+          }
+        },
+        "Finanzen_und_Organisation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "implicit": {
+                "type": "boolean"
+              }
+            },
+            "required": ["description", "implicit"],
+            "additionalProperties": false
+          }
+        },
+        "Sonstiges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "implicit": {
+                "type": "boolean"
+              }
+            },
+            "required": ["description", "implicit"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "Einkaufshilfe",
+        "Arztbesuche",
+        "Finanzen_und_Organisation",
+        "Sonstiges"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "age", "needs"],
+  "additionalProperties": false
+}
