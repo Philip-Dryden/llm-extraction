@@ -2,10 +2,16 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": ["string", "null"]
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "age": {
-      "type": ["integer", "null"]
+      "type": [
+        "integer",
+        "null"
+      ]
     },
     "needs": {
       "type": "object",
@@ -22,7 +28,10 @@
                 "type": "boolean"
               }
             },
-            "required": ["description", "implicit"],
+            "required": [
+              "description",
+              "implicit"
+            ],
             "additionalProperties": false
           }
         },
@@ -38,7 +47,10 @@
                 "type": "boolean"
               }
             },
-            "required": ["description", "implicit"],
+            "required": [
+              "description",
+              "implicit"
+            ],
             "additionalProperties": false
           }
         },
@@ -54,7 +66,10 @@
                 "type": "boolean"
               }
             },
-            "required": ["description", "implicit"],
+            "required": [
+              "description",
+              "implicit"
+            ],
             "additionalProperties": false
           }
         },
@@ -70,7 +85,10 @@
                 "type": "boolean"
               }
             },
-            "required": ["description", "implicit"],
+            "required": [
+              "description",
+              "implicit"
+            ],
             "additionalProperties": false
           }
         }
@@ -82,8 +100,49 @@
         "Sonstiges"
       ],
       "additionalProperties": false
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "time": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "date",
+          "time",
+          "notes"
+        ],
+        "additionalProperties": false
+      }
     }
   },
-  "required": ["name", "age", "needs"],
+  "required": [
+    "name",
+    "age",
+    "needs",
+    "tasks"
+  ],
   "additionalProperties": false
 }
