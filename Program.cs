@@ -5,7 +5,7 @@ class Program {
 
         string prompt  = File.ReadAllText("prompt/prompt_implicit_final.txt");
         string schema  = File.ReadAllText("prompt/extraction-schema.json");
-        string bericht = File.ReadAllText("reports/bericht2.txt");
+        string bericht = File.ReadAllText(args[0]);
 
         string input   = prompt + "\n\nHier ist das JSON-Schema:\n\n" + schema + "\n\nHier ist der zu analysierende Bericht:\n\n" + bericht;
 
