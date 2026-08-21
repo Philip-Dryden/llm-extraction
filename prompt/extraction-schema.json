@@ -1,19 +1,19 @@
 {
   "type": "object",
   "properties": {
-    "name": {
+    "Name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "age": {
+    "Age": {
       "type": [
         "integer",
         "null"
       ]
     },
-    "needs": {
+    "Needs": {
       "type": "object",
       "properties": {
         "Einkaufshilfe": {
@@ -21,16 +21,16 @@
           "items": {
             "type": "object",
             "properties": {
-              "description": {
+              "Description": {
                 "type": "string"
               },
-              "implicit": {
+              "Implicit": {
                 "type": "boolean"
               }
             },
             "required": [
-              "description",
-              "implicit"
+              "Description",
+              "Implicit"
             ],
             "additionalProperties": false
           }
@@ -40,16 +40,16 @@
           "items": {
             "type": "object",
             "properties": {
-              "description": {
+              "Description": {
                 "type": "string"
               },
-              "implicit": {
+              "Implicit": {
                 "type": "boolean"
               }
             },
             "required": [
-              "description",
-              "implicit"
+              "Description",
+              "Implicit"
             ],
             "additionalProperties": false
           }
@@ -59,16 +59,16 @@
           "items": {
             "type": "object",
             "properties": {
-              "description": {
+              "Description": {
                 "type": "string"
               },
-              "implicit": {
+              "Implicit": {
                 "type": "boolean"
               }
             },
             "required": [
-              "description",
-              "implicit"
+              "Description",
+              "Implicit"
             ],
             "additionalProperties": false
           }
@@ -78,16 +78,16 @@
           "items": {
             "type": "object",
             "properties": {
-              "description": {
+              "Description": {
                 "type": "string"
               },
-              "implicit": {
+              "Implicit": {
                 "type": "boolean"
               }
             },
             "required": [
-              "description",
-              "implicit"
+              "Description",
+              "Implicit"
             ],
             "additionalProperties": false
           }
@@ -101,27 +101,27 @@
       ],
       "additionalProperties": false
     },
-    "tasks": {
+    "Tasks": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "description": {
+          "Description": {
             "type": "string"
           },
-          "date": {
+          "Date": {
             "type": [
               "string",
               "null"
             ]
           },
-          "time": {
+          "Time": {
             "type": [
               "string",
               "null"
             ]
           },
-          "notes": {
+          "Notes": {
             "type": [
               "string",
               "null"
@@ -129,20 +129,20 @@
           }
         },
         "required": [
-          "description",
-          "date",
-          "time",
-          "notes"
+          "Description",
+          "Date",
+          "Time",
+          "Notes"
         ],
         "additionalProperties": false
       }
     }
   },
   "required": [
-    "name",
-    "age",
-    "needs",
-    "tasks"
+    "Name",
+    "Age",
+    "Needs",
+    "Tasks"
   ],
   "additionalProperties": false
 }
