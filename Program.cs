@@ -1,26 +1,41 @@
-﻿using Google.GenAI;
+﻿using Microsoft.Data.Sqlite;
+using Google.GenAI;
+using System.Text.Json;
+
 
 class Program {
+    
     static async Task Main(string[] args) {
+        Console.WriteLine("DB-Test:");
+        Console.WriteLine("InitializeDatabase():");
+        InitializeDatabase();
+        Console.WriteLine("Erfolgreich!");
+    }
 
-        string prompt  = File.ReadAllText("prompt/prompt_implicit_final.txt");
-        string schema  = File.ReadAllText("prompt/extraction-schema.json");
-        string bericht = File.ReadAllText(args[0]);
 
-        string input   = prompt + "\n\nHier ist das JSON-Schema:\n\n" + schema + "\n\nHier ist der zu analysierende Bericht:\n\n" + bericht;
+    static void InitializeDatabase() {
+        string connectionPath = "Data Source=data/database.db";
+        SqliteConnection connection = new SqliteConnection(connectionPath);
+        connection.Open();
 
-        var client = new Client();
-        var result = await client.Models.GenerateContentAsync("gemini-3.1-flash-lite" , input);
+        string[] sqlStatements = {
+            "CREATE TABLE IF NOT EXISTS Person(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
+            "CREATE TABLE IF NOT EXISTS Need(id INTEGER PRIMARY KEY, person_id INTEGER REFERENCES Person(id), category TEXT, description TEXT, implicit BOOLEAN)",
+            "CREATE TABLE IF NOT EXISTS Task(id INTEGER PRIMARY KEY, person_id INTEGER REFERENCES Person(id), description TEXT, date TEXT, time TEXT, notes TEXT)"
+        };
 
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        string filename = "logs/logfile_" + timestamp + ".txt";
+        foreach (string sql in sqlStatements) {
+        SqliteCommand command = new SqliteCommand(sql, connection);
+        command.ExecuteNonQuery();
+        }
+        connection.Close();
+    }
 
-        File.WriteAllText(
-            filename                            ,
-            "*****Gesendet an Gemini:*****\n\n" +
-            input                               +
-            "\n\n*****Ergebnis:*****\n\n"       +
-            result.Text
-        );
+    static void ImportPerson(Person person) {
+
+        string connectionPath = "Data Source=data/database.db";
+        SqliteConnection connection = new SqliteConnection(connectionPath);
+        connection.Open();
+
     }
 }
