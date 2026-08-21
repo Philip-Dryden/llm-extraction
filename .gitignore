@@ -7,3 +7,4 @@ logs/
 reports/
 temp/
 data/
+.editorconfig
