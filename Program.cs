@@ -16,35 +16,17 @@ class Program {
     const string extractionSchema = "extraction-schema.json";
 
         static async Task Main(string[] args) {
-
+        try {
         Directory.CreateDirectory(logsDirectory);
         Directory.CreateDirectory(databaseDirectory);
         InitializeDatabase();//creates database with tables if it doesn't exist yet
-
-        string prompt  = File.ReadAllText(Path.Combine(promptDirectory, promptInstructions));
-        string schema  = File.ReadAllText(Path.Combine(promptDirectory, extractionSchema));
-        string bericht = File.ReadAllText(args[0]);//requires to run the program with the filepath to the report as command parameter
-
-        string input   = prompt + "\n\nHier ist das JSON-Schema:\n\n" + schema + "\n\nHier ist der zu analysierende Bericht:\n\n" + bericht;
-
-        var client = new Client();
-        var result = await client.Models.GenerateContentAsync("gemini-3.1-flash-lite" , input);
-
-
-        //create logfile for testing purposes:
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        string filename = Path.Combine(logsDirectory, "logfile_" + timestamp + ".txt");
-        File.WriteAllText(
-            filename                            ,
-            "*****Gesendet an Gemini:*****\n\n" +
-            input                               +
-            "\n\n*****Ergebnis:*****\n\n"       +
-            result.Text
-        );
-
-
-        Person person = JsonSerializer.Deserialize<Person>(result.Text);
+        Person person = await ProcessReport(args[0]);
         ImportPerson(person);
+        }
+        catch (Exception exception) {
+            Console.WriteLine($"Error: {exception.Message}");
+            return;
+        }
     }
 
 
@@ -63,6 +45,36 @@ class Program {
         command.ExecuteNonQuery();
         }
         connection.Close();
+    }
+    static async Task<Person> ProcessReport(string reportPath) {
+        string prompt  = File.ReadAllText(Path.Combine(promptDirectory, promptInstructions));
+        string schema  = File.ReadAllText(Path.Combine(promptDirectory, extractionSchema));
+        string bericht = File.ReadAllText(reportPath);//requires to run the program with the filepath to the report as command parameter
+        string input   = prompt + "\n\nHier ist das JSON-Schema:\n\n" + schema + "\n\nHier ist der zu analysierende Bericht:\n\n" + bericht;
+
+        var client = new Client();
+        var result = await client.Models.GenerateContentAsync("gemini-3.1-flash-lite" , input);
+        if (result.Text is null) {
+            throw new Exception("LLM response failed. result.Text is null.");
+        }
+
+        //create logfile for testing purposes:
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        string filename = Path.Combine(logsDirectory, "logfile_" + timestamp + ".txt");
+        File.WriteAllText(
+            filename                            ,
+            "*****Gesendet an Gemini:*****\n\n" +
+            input                               +
+            "\n\n*****Ergebnis:*****\n\n"       +
+            result.Text
+        );
+
+
+        Person? person = JsonSerializer.Deserialize<Person>(result.Text);
+        if (person is null) {
+            throw new Exception("Deserialization failed, Person is null.");
+        }
+        return person;
     }
 
     static void ImportPerson(Person person) {
@@ -107,8 +119,6 @@ class Program {
                 needCommand.ExecuteNonQuery();
             }
         }
-
         connection.Close();
-        
     }
 }
