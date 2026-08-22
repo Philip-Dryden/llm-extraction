@@ -5,12 +5,24 @@ using System.Text.Json;
 
 class Program {
 
-    static async Task Main(string[] args) {
+    //constants for filepaths:
+    const string databaseDirectory = "data";
+    const string databaseFile = "database.db";
+    static readonly string databasePath = Path.Combine(databaseDirectory, databaseFile);
+    static readonly string connectionPath = $"Data Source={databasePath}";
+    const string logsDirectory = "logs";
+    const string promptDirectory = "prompt";
+    const string promptInstructions = "prompt_implicit_final.txt";
+    const string extractionSchema = "extraction-schema.json";
 
+        static async Task Main(string[] args) {
+
+        Directory.CreateDirectory(logsDirectory);
+        Directory.CreateDirectory(databaseDirectory);
         InitializeDatabase();//creates database with tables if it doesn't exist yet
 
-        string prompt  = File.ReadAllText("prompt/prompt_implicit_final.txt");
-        string schema  = File.ReadAllText("prompt/extraction-schema.json");
+        string prompt  = File.ReadAllText(Path.Combine(promptDirectory, promptInstructions));
+        string schema  = File.ReadAllText(Path.Combine(promptDirectory, extractionSchema));
         string bericht = File.ReadAllText(args[0]);//requires to run the program with the filepath to the report as command parameter
 
         string input   = prompt + "\n\nHier ist das JSON-Schema:\n\n" + schema + "\n\nHier ist der zu analysierende Bericht:\n\n" + bericht;
@@ -18,10 +30,10 @@ class Program {
         var client = new Client();
         var result = await client.Models.GenerateContentAsync("gemini-3.1-flash-lite" , input);
 
-        //test code:
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        string filename = "logs/logfile_" + timestamp + ".txt";
 
+        //create logfile for testing purposes:
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        string filename = Path.Combine(logsDirectory, "logfile_" + timestamp + ".txt");
         File.WriteAllText(
             filename                            ,
             "*****Gesendet an Gemini:*****\n\n" +
@@ -29,7 +41,7 @@ class Program {
             "\n\n*****Ergebnis:*****\n\n"       +
             result.Text
         );
-        //end of test code
+
 
         Person person = JsonSerializer.Deserialize<Person>(result.Text);
         ImportPerson(person);
@@ -37,7 +49,6 @@ class Program {
 
 
     static void InitializeDatabase() {
-        string connectionPath = "Data Source=data/database.db";
         SqliteConnection connection = new SqliteConnection(connectionPath);
         connection.Open();
 
@@ -56,7 +67,6 @@ class Program {
 
     static void ImportPerson(Person person) {
 
-        string connectionPath = "Data Source=data/database.db";
         SqliteConnection connection = new SqliteConnection(connectionPath);
         connection.Open();
 
